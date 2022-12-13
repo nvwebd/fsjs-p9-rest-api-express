@@ -2,6 +2,7 @@
 
 // load modules
 const express = require('express');
+const routes = require('routes');
 const morgan = require('morgan');
 const { sequelize } = require('./models');
 
@@ -18,28 +19,13 @@ sequelize
     console.error('Unable to connect to the database:', error);
   });
 
-const asyncHandler = (cb) => {
-  return async (req, res, next) => {
-    try {
-      await cb(req, res, next);
-    } catch (err) {
-      next(err);
-    }
-  };
-};
-
 // create the Express app
 const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
-
-// setup a friendly greeting for the root route
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the REST API project!',
-  });
-});
+app.use(express.json());
+app.use('/api', routes);
 
 // send 404 if no other route matched
 app.use((req, res) => {
@@ -57,21 +43,6 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     message: err.message,
     error: {},
-  });
-});
-
-app.use((req, res, next) => {
-  const error = new Error('Not Found');
-  error.status = 404;
-  next(error);
-});
-
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    error: {
-      message: err.message,
-    },
   });
 });
 
