@@ -10,8 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Course.belongsTo(models.User);
     }
   }
+
   Course.init(
     {
       title: DataTypes.STRING,
