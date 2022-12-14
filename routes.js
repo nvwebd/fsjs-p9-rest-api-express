@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { User, Course } = require('./models');
+
 const asyncHandler = (cb) => {
   return async (req, res, next) => {
     try {
@@ -85,7 +87,14 @@ router.delete(
 
 router.get(
   '/',
-  asyncHandler((req, res) => {
+  asyncHandler(async (req, res) => {
+    // console.log('db: ', db();
+    const users = await User.findAll();
+    const courses = await Course.findAll();
+
+    console.log('users: ', users);
+    console.log('courses: ', courses);
+
     res.json({
       message: 'Welcome to the REST API project!',
     });
