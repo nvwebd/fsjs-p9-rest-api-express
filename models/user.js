@@ -1,27 +1,44 @@
 'use strict';
-const { Model } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  class User extends Model {}
+const Sequelize = require('sequelize');
+
+module.exports = (sequelize) => {
+  class User extends Sequelize.Model {}
 
   User.init(
     {
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
-      emailAddress: DataTypes.STRING,
-      password: DataTypes.STRING,
+      firstName: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      emailAddress: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
     },
     {
       sequelize,
       modelName: 'User',
     }
   );
-
+  
+  /**
+   *
+   * @param models {Sequelize.Model[]}
+   */
   User.associate = (models) => {
     User.hasMany(models.Course, {
       foreignKey: {
         fieldName: 'userId',
-        allowNull: true,
+        allowNull: false,
       },
     });
   };

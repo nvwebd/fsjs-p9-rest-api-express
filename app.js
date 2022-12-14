@@ -1,9 +1,11 @@
 'use strict';
 
-// load modules
 const express = require('express');
-const routes = require('./routes');
+
+const userRoutes = require('./routes/users');
+const courseRoutes = require('./routes/courses');
 const morgan = require('morgan');
+
 const { sequelize } = require('./models');
 
 // variable to enable global error logging
@@ -26,7 +28,8 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 app.use(express.json());
-app.use('/api', routes);
+app.use('/api', userRoutes);
+app.use('/api', courseRoutes);
 
 // send 404 if no other route matched
 app.use((req, res) => {
@@ -43,7 +46,7 @@ app.use((err, req, res, next) => {
 
   res.status(err.status || 500).json({
     message: err.message,
-    error: {},
+    error: process.env.NODE_ENV === 'production' ? {} : err,
   });
 });
 
