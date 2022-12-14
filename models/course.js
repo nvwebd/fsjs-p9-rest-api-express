@@ -1,29 +1,42 @@
 'use strict';
-const { Model } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  class Course extends Model {}
+const Sequelize = require('sequelize');
+
+module.exports = (sequelize) => {
+  class Course extends Sequelize.Model {}
 
   Course.init(
     {
-      title: DataTypes.STRING,
-      description: DataTypes.TEXT,
-      estimatedTime: DataTypes.STRING,
-      materialsNeeded: DataTypes.STRING,
-      userId: DataTypes.STRING,
+      title: {
+        type: Sequelize.STRING,
+      },
+      description: {
+        type: Sequelize.TEXT,
+      },
+      estimatedTime: {
+        type: Sequelize.STRING
+      },
+      materialsNeeded: {
+        type: Sequelize.STRING
+      }
     },
     {
       sequelize,
-      modelName: 'Course',
     }
   );
-
+  
+  /**
+   * create Course associations
+   * @param models {Sequelize.Model<User | Course>}
+   */
   Course.associate = (models) => {
     Course.belongsTo(models.User, {
+      as: 'user',
       foreignKey: {
-        fieldName: 'userId',
-        allowNull: true,
+        field: 'userId',
+        allowNull: true
       },
+      constraints: false
     });
   };
 
