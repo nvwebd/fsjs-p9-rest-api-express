@@ -2,7 +2,7 @@
 
 // load modules
 const express = require('express');
-const routes = require('routes');
+const routes = require('./routes');
 const morgan = require('morgan');
 const { sequelize } = require('./models');
 
@@ -12,8 +12,9 @@ const enableGlobalErrorLogging =
 
 sequelize
   .authenticate()
-  .then(() => {
+  .then(async () => {
     console.log('SQLite DB Connection has been established successfully.');
+    // await sequelize.sync({ force: true });
   })
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
