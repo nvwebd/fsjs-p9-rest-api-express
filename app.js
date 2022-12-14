@@ -2,8 +2,7 @@
 
 const express = require('express');
 
-const userRoutes = require('./routes/users');
-const courseRoutes = require('./routes/courses');
+const rootRoutes = require('./routes');
 const morgan = require('morgan');
 
 const { sequelize } = require('./models');
@@ -28,8 +27,7 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 app.use(express.json());
-app.use('/api', userRoutes);
-app.use('/api', courseRoutes);
+app.use('/api', rootRoutes);
 
 // send 404 if no other route matched
 app.use((req, res) => {

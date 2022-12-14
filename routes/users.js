@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { User } = require('../models');
 
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
 	const users = await User.findAll();
 	
 	console.log('users: ', users);
@@ -14,7 +14,7 @@ router.get('/users', async (req, res) => {
   });
 });
 
-router.post('/users', async (req, res) => {
+router.post('/', async (req, res) => {
   const userData = req.body;
 
   console.log('userData: ', userData);
