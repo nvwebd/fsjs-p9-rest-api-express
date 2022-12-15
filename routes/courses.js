@@ -16,6 +16,9 @@ router.get(
         {
           model: User,
           as: 'user',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt', 'password']
+          }
         },
       ],
     });
@@ -37,6 +40,9 @@ router.get(
         {
           model: User,
           as: 'user',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt', 'password']
+          }
         },
       ],
     });
@@ -49,12 +55,20 @@ router.post(
   '/',
   authenticateUser,
   asyncHandler(async (req, res) => {
-    const createData = req.body;
-
-    await Course.create(createData);
-
-    res.setHeader('Location', '/');
-    res.status(201).end();
+    try {
+      const { body } = req;
+      
+      await Course.create(body);
+      
+      res.setHeader('Location', '/').status(201).end();
+    } catch(error) {
+      if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+        const errors = error.errors.map(err => err.message);
+        res.status(400).json({ errors });
+      } else {
+        throw error;
+      }
+    }
   })
 );
 

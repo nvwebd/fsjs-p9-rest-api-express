@@ -8,7 +8,7 @@ const { User } = require('../models');
 router.get('/', authenticateUser, asyncHandler(async (req, res) => {
   const user = req.currentUser;
   
-  res.status(201).json(user);
+  res.status(200).json(user);
 }));
 
 router.post('/', asyncHandler(async (req, res) => {
