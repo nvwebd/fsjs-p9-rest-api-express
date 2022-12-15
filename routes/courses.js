@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { authenticateUser } = require('../middleware/authMiddleware');
+const asyncHandler = require('../middleware/asyncMiddleware');
 
 const { Course, User } = require('../models');
-const asyncHandler = require('./utils/asyncHandler');
 
 router.get(
   '/',
@@ -40,6 +41,7 @@ router.get(
 
 router.post(
   '/',
+  authenticateUser,
   asyncHandler(async (req, res) => {
     const createData = req.body;
 
@@ -52,6 +54,7 @@ router.post(
 
 router.put(
   '/:id',
+  authenticateUser,
   asyncHandler(async (req, res) => {
     const courseId = req.params.id;
     const updateData = req.body;
@@ -68,6 +71,7 @@ router.put(
 
 router.delete(
   '/:id',
+  authenticateUser,
   asyncHandler(async (req, res) => {
     const courseId = req.params.id;
     

@@ -1,25 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const { authenticateUser } = require('../middleware/authMiddleware');
+const asyncHandler = require('../middleware/asyncMiddleware');
 
 const { User } = require('../models');
 
-router.get('/', async (req, res) => {
-  const users = await User.findAll();
+router.get('/', authenticateUser, asyncHandler(async (req, res) => {
+  const user = req.currentUser;
+  
+  console.log('user: ', user);
+  
+  res.status(200).json(user);
+}));
 
-  console.log('users: ', users);
-
-  res.status(200);
-  res.json({
-    user: 'To Be Implemented',
-  });
-});
-
-router.post('/', async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
   const userData = req.body;
   
   await User.create(userData);
-
+  
   res.setHeader('Location', '/').status(201).end();
-});
+}));
 
 module.exports = router;

@@ -4,7 +4,7 @@
  * @param cb {function}
  * @returns {(function(*, *, *): Promise<void>)|*}
  */
-const asyncHandler = (cb) => {
+const asyncMiddleware = (cb) => {
 	return async (req, res, next) => {
 		try {
 			await cb(req, res, next);
@@ -15,4 +15,4 @@ const asyncHandler = (cb) => {
 	}
 }
 
-module.exports = asyncHandler;
+module.exports = asyncMiddleware;
