@@ -15,7 +15,12 @@ exports.authenticateUser = async (req, res, next) => {
 			if (authenticated) {
 				console.log(`Authentication successful for User: ${user.emailAddress}`);
 				
-				req.currentUser = user;
+				req.currentUser = {
+					id: user.id,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.emailAddress
+				};
 			} else {
 				message = `Authentication failure for E-Mail: ${user.emailAddress}`;
 			}
@@ -32,6 +37,4 @@ exports.authenticateUser = async (req, res, next) => {
 	} else {
 		next();
 	}
-	
-	next();
 }
