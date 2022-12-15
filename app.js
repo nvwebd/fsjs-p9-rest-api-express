@@ -38,7 +38,9 @@ const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
+
 app.use(express.json());
+
 app.use('/api', rootRoutes);
 
 // send 404 if no other route matched
