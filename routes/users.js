@@ -5,13 +5,13 @@ const asyncHandler = require('../middleware/asyncMiddleware');
 
 const { User } = require('../models');
 
-router.get('', authenticateUser, asyncHandler(async (req, res) => {
+router.get('/', authenticateUser, asyncHandler(async (req, res) => {
   const user = req.currentUser;
   
   res.status(201).json(user);
 }));
 
-router.post('', asyncHandler(async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
   try {
     const userData = req.body;
     
