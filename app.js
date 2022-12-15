@@ -11,16 +11,27 @@ const { sequelize } = require('./models');
 const enableGlobalErrorLogging =
   process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
-sequelize
-  .authenticate()
-  .then(async () => {
+
+(async () => {
+  try {
+    await sequelize.authenticate();
     console.log('SQLite DB Connection has been established successfully.');
-    // await sequelize.sync({ force: true});
-    await sequelize.sync();
-  })
-  .catch((error) => {
+    
+  } catch(error) {
     console.error('Unable to connect to the database:', error);
-  });
+  }
+  
+  try {
+    await sequelize.sync();
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
+      const errors = error.errors.map(err => err.message);
+      console.error('Validation errors: ', errors);
+    } else {
+      throw error;
+    }
+  }
+})();
 
 // create the Express app
 const app = express();
