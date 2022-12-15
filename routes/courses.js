@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const { authenticateUser } = require('../middleware/authMiddleware');
+const asyncHandler = require('../middleware/asyncMiddleware');
 
 const { Course, User } = require('../models');
-const asyncHandler = require('./utils/asyncHandler');
 
 router.get(
   '/',
   asyncHandler(async (req, res) => {
     const allCourses = await Course.findAll({
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      },
       include: [
         {
           model: User,
@@ -26,6 +30,9 @@ router.get(
     const courseId = req.params.id;
 
     const course = await Course.findByPk(courseId, {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      },
       include: [
         {
           model: User,
@@ -40,6 +47,7 @@ router.get(
 
 router.post(
   '/',
+  authenticateUser,
   asyncHandler(async (req, res) => {
     const createData = req.body;
 
@@ -52,28 +60,54 @@ router.post(
 
 router.put(
   '/:id',
+  authenticateUser,
   asyncHandler(async (req, res) => {
-    const courseId = req.params.id;
-    const updateData = req.body;
-
-    await Course.update(updateData, {
-      where: {
-        id: courseId,
-      },
-    });
-    
-    res.status(204).end();
+    try {
+      const { currentUser, body, params } = req;
+      const course = await Course.findByPk(params.id);
+      
+      if (!course) {
+        res.status(404).json({ message: 'Course Not Found'})
+      }
+      
+      if ( currentUser.id === course.userId ) {
+        await course.update(body);
+        res.status(204).end();
+      } else {
+        res.status(403).json({ message: 'Not Allowed'})
+      }
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+        const errors = error.errors.map(err => err.message);
+        res.status(400).json({ errors });
+      } else {
+        throw error;
+      }
+    }
   })
 );
 
 router.delete(
   '/:id',
+  authenticateUser,
   asyncHandler(async (req, res) => {
-    const courseId = req.params.id;
+    try {
+      const { currentUser, body, params } = req;
+      const course = await Course.findByPk(params.id);
     
-    await Course.destroy({ where: { id: courseId }});
+      if (!course) {
+        res.status(404).json({ message: 'Course Not Found'})
+      }
     
-    res.status(204).end();
+      if ( currentUser.id === course.userId ) {
+        await course.destroy();
+        res.status(204).end();
+      } else {
+        res.status(403).json({ message: 'Not Allowed'})
+      }
+    } catch (error) {
+      console.error('Error Deleting Course: ', error)
+    }
   })
 );
 
