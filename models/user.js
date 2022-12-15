@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'Last name must be set'
+            msg: 'First name must be set'
           }
         },
       },
