@@ -12,11 +12,13 @@ const { sequelize } = require('./models');
 const enableGlobalErrorLogging =
   process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
+/**
+ * set up the sqlite connection
+ */
 (async () => {
   try {
     await sequelize.authenticate();
     console.log('SQLite DB Connection has been established successfully.');
-    
   } catch(error) {
     console.error('Unable to connect to the database:', error);
   }
@@ -37,8 +39,14 @@ const enableGlobalErrorLogging =
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
+/**
+ * parse incoming requests with JSON
+ */
 app.use(express.json());
 
+/**
+ * import defined routes
+ */
 app.use('/api', rootRoutes);
 
 // send 404 if no other route matched

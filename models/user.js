@@ -4,6 +4,11 @@ const Sequelize = require('sequelize');
 
 const bcrypt = require('bcryptjs');
 
+/**
+ * Set up the User model
+ * @param sequelize
+ * @returns {User}
+ */
 module.exports = (sequelize) => {
   class User extends Sequelize.Model {}
 
@@ -60,7 +65,7 @@ module.exports = (sequelize) => {
   );
   
   /**
-   *
+   * associate User model with Course model
    * @param models {Sequelize.Model[]}
    */
   User.associate = (models) => {

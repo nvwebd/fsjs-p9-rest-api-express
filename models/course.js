@@ -2,6 +2,13 @@
 
 const Sequelize = require('sequelize');
 
+
+/**
+ * set up the Course Model
+ * @param sequelize
+ * @returns {Course}
+ */
+
 module.exports = (sequelize) => {
   class Course extends Sequelize.Model {}
 
@@ -28,7 +35,7 @@ module.exports = (sequelize) => {
   );
   
   /**
-   * create Course associations
+   * create Course association to User
    * @param models {Sequelize.Model<User | Course>}
    */
   Course.associate = (models) => {

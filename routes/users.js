@@ -5,12 +5,19 @@ const asyncHandler = require('../middleware/asyncMiddleware');
 
 const { User } = require('../models');
 
+/**
+ * get the currently authenticated user based on basic auth
+ */
 router.get('/', authenticateUser, asyncHandler(async (req, res) => {
   const user = req.currentUser;
   
   res.status(200).json(user);
 }));
 
+
+/**
+ * create a new user in the DB
+ */
 router.post('/', asyncHandler(async (req, res) => {
   try {
     const userData = req.body;

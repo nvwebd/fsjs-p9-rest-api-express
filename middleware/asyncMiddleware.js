@@ -1,6 +1,7 @@
 // Handler function to wrap each route.
+
 /**
- * A util module for Routes
+ * A util module for Routes - handling async requests and error propagation
  * @param cb {function}
  * @returns {(function(*, *, *): Promise<void>)|*}
  */
