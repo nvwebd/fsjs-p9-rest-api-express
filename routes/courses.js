@@ -5,6 +5,9 @@ const asyncHandler = require('../middleware/asyncMiddleware');
 
 const { Course, User } = require('../models');
 
+/**
+ * get a list of courses stored in the DB
+ */
 router.get(
   '/',
   asyncHandler(async (req, res) => {
@@ -27,6 +30,9 @@ router.get(
   })
 );
 
+/**
+ * get a course by passed in id argument
+ */
 router.get(
   '/:id',
   asyncHandler(async (req, res) => {
@@ -51,6 +57,9 @@ router.get(
   })
 );
 
+/**
+ * create a new course in the DB
+ */
 router.post(
   '/',
   authenticateUser,
@@ -72,6 +81,10 @@ router.post(
   })
 );
 
+/**
+ * update a course based on argument and input data
+ * user can update only own courses
+ */
 router.put(
   '/:id',
   authenticateUser,
@@ -101,6 +114,10 @@ router.put(
   })
 );
 
+/**
+ * delete a course based on input ID
+ * user can update only own courses
+ */
 router.delete(
   '/:id',
   authenticateUser,
