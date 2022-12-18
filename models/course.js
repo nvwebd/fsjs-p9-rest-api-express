@@ -11,16 +11,28 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize) => {
   class Course extends Sequelize.Model {}
-
+  
   Course.init(
     {
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          notNull: {
+            msg: 'Title is required',
+          },
+        }
       },
       description: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          notNull: {
+            msg: 'Description is required',
+          }
+        }
       },
       estimatedTime: {
         type: Sequelize.STRING
@@ -48,6 +60,6 @@ module.exports = (sequelize) => {
       constraints: false
     });
   };
-
+  
   return Course;
 };
