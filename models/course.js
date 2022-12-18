@@ -1,7 +1,6 @@
-'use strict';
+"use strict";
 
-const Sequelize = require('sequelize');
-
+const Sequelize = require("sequelize");
 
 /**
  * set up the Course Model
@@ -18,28 +17,32 @@ module.exports = (sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          notEmpty: true,
-          notNull: {
-            msg: 'Title is required',
+          notEmpty: {
+            msg: "The course title is required and cannot be empty",
           },
-        }
+          notNull: {
+            msg: "Title is required",
+          },
+        },
       },
       description: {
         type: Sequelize.TEXT,
         allowNull: false,
         validate: {
-          notEmpty: true,
+          notEmpty: {
+            msg: "The course description is required and cannot be empty",
+          },
           notNull: {
-            msg: 'Description is required',
-          }
-        }
+            msg: "Description is required",
+          },
+        },
       },
       estimatedTime: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       materialsNeeded: {
-        type: Sequelize.STRING
-      }
+        type: Sequelize.STRING,
+      },
     },
     {
       sequelize,
@@ -52,12 +55,12 @@ module.exports = (sequelize) => {
    */
   Course.associate = (models) => {
     Course.belongsTo(models.User, {
-      as: 'user',
+      as: "user",
       foreignKey: {
-        field: 'userId',
-        allowNull: true
+        field: "userId",
+        allowNull: true,
       },
-      constraints: false
+      constraints: false,
     });
   };
   
